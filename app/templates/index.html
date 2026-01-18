@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Similar Context Search</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Similar Context Search</h1>
+    <p class="sub">Dot-product retrieval (top 10) over {{ total }} contexts</p>
+
+    <form method="POST" class="searchbox">
+      <input name="query" value="{{ query }}" placeholder="Type your query (e.g., harry potter)..." autofocus />
+      <button type="submit">Search</button>
+    </form>
+
+    {% if query and results|length == 0 %}
+      <p class="warn">No results (query words may be OOV).</p>
+    {% endif %}
+
+    {% if results|length > 0 %}
+      <h2>Top results</h2>
+      <ol class="results">
+        {% for idx, score, text in results %}
+          <li>
+            <div class="meta">score: {{ "%.4f"|format(score) }} • id: {{ idx }}</div>
+            <div class="ctx">{{ text }}</div>
+          </li>
+        {% endfor %}
+      </ol>
+    {% endif %}
+  </div>
+</body>
+</html>
